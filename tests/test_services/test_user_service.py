@@ -149,9 +149,16 @@ async def test_reset_password(db_session, user):
 
 # Test verifying a user's email
 async def test_verify_email_with_token(db_session, user):
-    token = "valid_token_example"  # This should be set in your user setup if it depends on a real token
-    user.verification_token = token  # Simulating setting the token in the database
+    from app.utils.security import generate_verification_token
+    
+    # Generate a valid token with our new system
+    token = generate_verification_token(expiration_hours=24)
+    
+    # Assign the same token to the user
+    user.verification_token = token
     await db_session.commit()
+    
+    # Attempt to verify with the same token
     result = await UserService.verify_email_with_token(db_session, user.id, token)
     assert result is True
 
