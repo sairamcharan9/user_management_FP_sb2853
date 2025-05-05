@@ -7,7 +7,9 @@ import uuid
 import re
 from app.models.user_model import UserRole
 from app.utils.nickname_gen import generate_nickname
+import logging
 
+logger = logging.getLogger(__name__)
 
 def validate_url(url: Optional[str]) -> Optional[str]:
     if url is None:
@@ -16,6 +18,44 @@ def validate_url(url: Optional[str]) -> Optional[str]:
     if not re.match(url_regex, url):
         raise ValueError('Invalid URL format')
     return url
+
+def validate_password_strength(password: str) -> str:
+    """
+    Validate password strength according to security best practices.
+    
+    Requirements:
+    - Minimum 8 characters
+    - At least one uppercase letter
+    - At least one lowercase letter
+    - At least one digit
+    - At least one special character
+    
+    Args:
+        password: The password to validate
+        
+    Returns:
+        The password if valid
+        
+    Raises:
+        ValueError: If the password doesn't meet requirements
+    """
+    if len(password) < 8:
+        raise ValueError("Password must be at least 8 characters long")
+    
+    if not re.search(r'[A-Z]', password):
+        raise ValueError("Password must contain at least one uppercase letter")
+    
+    if not re.search(r'[a-z]', password):
+        raise ValueError("Password must contain at least one lowercase letter")
+    
+    if not re.search(r'[0-9]', password):
+        raise ValueError("Password must contain at least one digit")
+    
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        raise ValueError("Password must contain at least one special character")
+    
+    logger.debug("Password validation passed")
+    return password
 
 class UserBase(BaseModel):
     email: EmailStr = Field(..., example="john.doe@example.com")
@@ -35,7 +75,10 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
-    password: str = Field(..., example="Secure*1234")
+    password: str = Field(..., example="SecureP@ss123")
+    
+    # Add password validation
+    _validate_password = validator('password', pre=True, always=True)(validate_password_strength)
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
@@ -47,6 +90,14 @@ class UserUpdate(UserBase):
     linkedin_profile_url: Optional[str] =Field(None, example="https://linkedin.com/in/johndoe")
     github_profile_url: Optional[str] = Field(None, example="https://github.com/johndoe")
     role: Optional[str] = Field(None, example="AUTHENTICATED")
+    password: Optional[str] = Field(None, example="SecureP@ss123")
+    
+    # Apply password validation only if password is being updated
+    @validator('password', pre=True)
+    def validate_password_optional(cls, password):
+        if password is not None:
+            return validate_password_strength(password)
+        return password
 
     @root_validator(pre=True)
     def check_at_least_one_value(cls, values):
