@@ -186,13 +186,11 @@ class MinioService:
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail=f"Error saving active copy: {str(active_error)}"
                 )
-            
+
             logger.info(f"Stored profile picture in both archive and active locations")
             
             # Generate a fully qualified URL for database storage
-            # Use the configured server base URL from settings
-            from app.dependencies import get_settings
-            settings = get_settings()
+            # Use the configured server base URL from settings that's already imported
             base_url = settings.server_base_url
             url = f"{base_url}/profiles/{user_id}/picture"
             logger.info(f"Upload successful. Full URL for database: {url}")
