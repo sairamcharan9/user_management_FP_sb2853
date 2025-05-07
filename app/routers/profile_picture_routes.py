@@ -15,6 +15,7 @@ from app.services.minio_service import MinioService
 from app.services.user_service import UserService
 from app.schemas.user_schemas import UserResponse
 from app.utils.link_generation import create_user_links
+from app.utils.image_validator import validate_image_and_raise
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -88,36 +89,19 @@ async def upload_profile_picture(
         logger.info(f"Starting upload for user {user_id}, file: {file.filename}, size: {file.size}, content_type: {file.content_type}")
         logger.debug(f"Current user info: {current_user}")
         
-        # Validate file content type
-        if not file.content_type:
+        # Perform comprehensive image validation including security checks
+        try:
+            # validate_image_and_raise will raise HTTPException with appropriate error messages if validation fails
+            image_metadata = await validate_image_and_raise(file)
+            logger.info(f"Successfully validated image for user {user_id}: format={image_metadata['format']}, dimensions={image_metadata['width']}x{image_metadata['height']}px")
+        except HTTPException as validation_error:
+            logger.warning(f"Image validation failed for user {user_id}: {validation_error.detail}")
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error during image validation: {str(e)}", exc_info=True)
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Missing content type. Please ensure you're uploading a valid image file."
-            )
-            
-        # Validate the file is actually an image
-        if not file.content_type.startswith('image/'):
-            logger.warning(f"Rejected file upload with invalid content type: {file.content_type}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid file type: {file.content_type}. Only image files are allowed (jpg, jpeg, png, gif)."
-            )
-            
-        # Validate file has a filename
-        if not file.filename:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Missing filename. Please ensure your image file has a name."
-            )
-            
-        # Validate file extension
-        valid_extensions = [".jpg", ".jpeg", ".png", ".gif"]
-        file_ext = ".".join(file.filename.lower().split(".")[1:]) if "." in file.filename else ""
-        if not any(file.filename.lower().endswith(ext) for ext in valid_extensions):
-            logger.warning(f"Rejected file with invalid extension: {file_ext}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid file extension: .{file_ext}. Allowed extensions are: {', '.join(valid_extensions)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An error occurred while validating the image. Please try again later."
             )
         
         try:
