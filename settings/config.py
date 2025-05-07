@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     minio_endpoint: str = Field(default='localhost:9000', description="Minio server endpoint")
     minio_access_key: str = Field(default='minioadmin', description="Minio access key")
     minio_secret_key: str = Field(default='minioadmin', description="Minio secret key")
-    minio_bucket_name: str = Field(default='user-profiles', description="Minio bucket name for storing user profiles")
+    minio_bucket_name: str = Field(default='profiles', description="Minio bucket name for storing user profiles")
     minio_secure: bool = Field(default=False, description="Whether to use HTTPS for Minio connections")
 
 
