@@ -36,17 +36,10 @@ class Settings(BaseSettings):
     openai_api_key: str = Field(default='NONE', description="Open AI Api Key")
     send_real_mail: bool = Field(default=False, description="use mock")
     # Email settings for Mailtrap
-    smtp_server: str = Field(default='sandbox.smtp.mailtrap.io', description="SMTP server for sending emails")
+    smtp_server: str = Field(default='smtp.mailtrap.io', description="SMTP server for sending emails")
     smtp_port: int = Field(default=2525, description="SMTP port for sending emails")
-    smtp_username: str = Field(default='a607a7ada8df25', description="Username for SMTP server")
-    smtp_password: str = Field(default='cf0514ccc6fc90', description="Password for SMTP server")
-    
-    # Minio configuration for object storage
-    minio_endpoint: str = Field(default='localhost:9000', description="Minio server endpoint")
-    minio_access_key: str = Field(default='minioadmin', description="Minio access key")
-    minio_secret_key: str = Field(default='minioadmin', description="Minio secret key")
-    minio_bucket_name: str = Field(default='user-profiles', description="Minio bucket name for storing user profiles")
-    minio_secure: bool = Field(default=False, description="Whether to use HTTPS for Minio connections")
+    smtp_username: str = Field(default='your-mailtrap-username', description="Username for SMTP server")
+    smtp_password: str = Field(default='your-mailtrap-password', description="Password for SMTP server")
 
 
     class Config:
