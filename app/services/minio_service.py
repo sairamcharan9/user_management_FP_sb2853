@@ -189,9 +189,9 @@ class MinioService:
             
             logger.info(f"Stored profile picture in both archive and active locations")
             
-            # Generate a fully qualified URL for database storage
+            # Generate a fully qualified URL for database storage using application settings
             # Must include http(s):// to pass URL validation in the schema
-            base_url = "https://example.com"  # This is a placeholder that will be replaced in production
+            base_url = str(settings.server_base_url).rstrip('/')
             url = f"{base_url}/profiles/{user_id}/picture"
             logger.info(f"Upload successful. Full URL for database: {url}")
             
