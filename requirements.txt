@@ -49,6 +49,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-jose==3.3.0
 python-multipart==0.0.9
+Pillow==10.1.0
 qrcode==7.4.2
 rsa==4.9
 six==1.16.0
