@@ -70,7 +70,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
+      # Skip Docker login if secrets aren't available
+      - name: Check for Docker credentials
+        id: check_secrets
+        env:
+          USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [[ -n "$USERNAME" && -n "$TOKEN" ]]; then
+            echo "has_docker_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_docker_secrets=false" >> $GITHUB_OUTPUT
+            echo "::warning::DockerHub credentials not found. Docker build will run without push."
+          fi
+      
       - name: Log in to DockerHub
+        if: steps.check_secrets.outputs.has_docker_secrets == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -79,13 +94,14 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          push: true
+          push: ${{ steps.check_secrets.outputs.has_docker_secrets == 'true' }}
           tags: sairamcharan9/user_management:${{ github.sha }} # Uses the Git SHA for tagging
           platforms: linux/amd64 # Simplified for faster builds
           cache-from: type=registry,ref=sairamcharan9/user_management:cache
           cache-to: type=inline,mode=max
           
       - name: Scan the Docker image
+        if: steps.check_secrets.outputs.has_docker_secrets == 'true'
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'sairamcharan9/user_management:${{ github.sha }}'
