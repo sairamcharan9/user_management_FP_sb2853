@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System Implementation Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            font-size: 26px;
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 22px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            font-size: 18px;
+            margin-top: 1.2em;
+        }
+        h4 {
+            font-size: 16px;
+            margin-top: 1em;
+        }
+        code {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            font-family: monospace;
+            padding: 2px 4px;
+            font-size: 14px;
+        }
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .img-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+        .caption {
+            font-style: italic;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .branch-table tr td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+        .highlight {
+            background-color: #ffffcc;
+            padding: 10px;
+            border-left: 3px solid #e67e22;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .author-info {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .date {
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Management System: Profile Picture Upload Implementation</h1>
+    
+    <div class="author-info">
+        <p><strong>Author:</strong> Sai Ram Charan BANDARUPALLI</p>
+        <p><strong>GitHub Repository:</strong> <a href="https://github.com/sairamcharan9/user_management_FP_sb2853" target="_blank">https://github.com/sairamcharan9/user_management_FP_sb2853</a></p>
+    </div>
+
+    <div class="date">
+        <p>May 7, 2025</p>
+    </div>
+
+    <h2>1. Project Overview and Achievements</h2>
+
+    <p>The User Management System project successfully implemented a comprehensive FastAPI application with robust user authentication, profile management, email verification, and profile picture functionality. The system integrates with MinIO for object storage, PostgreSQL for data persistence, and SMTP for email notifications.</p>
+
+    <p><strong>Key Accomplishments:</strong></p>
+    <ul>
+        <li>Implemented secure user registration with email verification</li>
+        <li>Created profile management system with picture upload capabilities</li>
+        <li>Developed MinIO integration for efficient object storage</li>
+        <li>Established a role-based access control system</li>
+        <li>Built a containerized deployment with Docker</li>
+    </ul>
+
+    <h2>2. Feature Implementation Evidence</h2>
+
+    <h3>2.1 Profile Picture Upload and Retrieval</h3>
+
+    <p><strong>API Response Evidence:</strong></p>
+    
+    <p>The image below shows a successful API response from our system, demonstrating the profile picture functionality in action. The response includes the user profile with a valid profile picture URL (<code>http://localhost/profiles/f23e1cd4-97da-47e6-9de4-8bc450f78324/picture</code>), confirming that our implementation correctly associates images with user accounts and generates accessible URLs.</p>
+
+    <div class="img-container">
+        <img src="c:\Users\saira\Documents\WORKSPACE\python\projectK\web systems\image1.png" alt="API Response showing successful profile picture URL generation">
+        <p class="caption">Figure 1: FastAPI Response showing successful profile picture implementation</p>
+    </div>
+
+    <pre><code>{
+  "email": "john.doe@example.com",
+  "nickname": "clever_koala_678",
+  "first_name": "John",
+  "last_name": "Doe",
+  "bio": "Software developer and web applications.",
+  "profile_picture_url": "http://localhost/profiles/f23e1cd4-97da-47e6-9de4-8bc450f78324/picture",
+  "linkedin_profile_url": "https://linkedin.com/in/johndoe",
+  "github_profile_url": "https://github.com/johndoe",
+  "role": "AUTHENTICATED",
+  "id": "f23e1cd4-97da-47e6-9de4-8bc450f78324",
+  "is_professional": false
+}</code></pre>
+
+    <p><strong>MinIO Storage Evidence:</strong></p>
+
+    <p>The implementation successfully stores profile pictures in MinIO, with both the active profile picture and an archived version for history preservation. The image below shows the MinIO console displaying a user-profiles bucket with:</p>
+
+    <ul>
+        <li>Directory structure following the pattern <code>profile_pictures/{user_id}/</code></li>
+        <li>Archive directory for version history</li>
+        <li>Active profile.jpeg file (16.3 KiB) successfully uploaded</li>
+        <li>Timestamps showing recent activity (Today, 14:18)</li>
+    </ul>
+
+    <div class="img-container">
+        <img src="c:\Users\saira\Documents\WORKSPACE\python\projectK\web systems\image2.png" alt="MinIO console showing stored profile pictures">
+        <p class="caption">Figure 2: MinIO Console showing successful file storage and organization</p>
+    </div>
+
+    <p>This confirms the proper functioning of our MinIO service integration and file storage strategy.</p>
+
+    <h3>2.2 Email Verification System</h3>
+
+    <p>The email verification system was successfully implemented using Mailtrap for testing. The evidence shows:</p>
+
+    <ul>
+        <li>Proper email formatting with verification links</li>
+        <li>Subject line "Verify Your Account"</li>
+        <li>Clear instructions for the user to complete verification</li>
+        <li>Functional verification link</li>
+        <li>Appropriate email template with company information</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>3. Implementation Architecture</h2>
+
+    <h3>3.1 Core Components</h3>
+
+    <p>Our implementation architecture consists of several key components working together:</p>
+
+    <ol>
+        <li><strong>User Authentication System</strong>
+            <ul>
+                <li>JWT-based authentication with refresh tokens</li>
+                <li>Role-based access control (ANONYMOUS, AUTHENTICATED, MANAGER, ADMIN)</li>
+                <li>Email verification workflow</li>
+            </ul>
+        </li>
+        <li><strong>Profile Management</strong>
+            <ul>
+                <li>User profile data storage in PostgreSQL</li>
+                <li>Profile update capabilities</li>
+                <li>Professional status tracking</li>
+            </ul>
+        </li>
+        <li><strong>File Storage Solution</strong>
+            <ul>
+                <li>MinIO object storage integration</li>
+                <li>Dual storage strategy (active + archive)</li>
+                <li>Secure URL generation</li>
+            </ul>
+        </li>
+        <li><strong>Container Orchestration</strong>
+            <ul>
+                <li>Docker & Docker Compose deployment</li>
+                <li>Service isolation and networking</li>
+                <li>Environment configuration via .env files</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>3.2 MinIO Service Implementation</h3>
+
+    <p>The MinioService class handles all interactions with the MinIO object storage system:</p>
+
+    <pre><code>async def upload_profile_picture(cls, file: UploadFile, user_id: str) -> str:
+    """Upload a profile picture to MinIO and return its URL."""
+    client = cls.get_client()
+    bucket_name = settings.minio_bucket_name
+    
+    # Ensure bucket exists
+    if not client.bucket_exists(bucket_name):
+        client.make_bucket(bucket_name)
+    
+    # Generate timestamped filename for archive
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    archive_name = f"profile_pictures/{user_id}/archive/profile_{timestamp}{file_extension}"
+    
+    # Use consistent name for active profile picture
+    active_name = f"profile_pictures/{user_id}/profile{file_extension}"
+    
+    # Upload to both locations
+    client.put_object(bucket_name, archive_name, file_data_io, file_size, content_type)
+    client.put_object(bucket_name, active_name, file_data_io, file_size, content_type)
+    
+    # Generate URL for database
+    url = f"{settings.server_base_url}/profiles/{user_id}/picture"
+    return url</code></pre>
+
+    <p>The evidence in the MinIO console screenshot (Figure 2) confirms this implementation works correctly, showing both the archive directory and active profile picture file structure.</p>
+
+    <h3>3.3 API Endpoints and Access Control</h3>
+
+    <p>The system implements role-based access control for profile picture management:</p>
+
+    <pre><code>@router.post("/{user_id}/profile-picture", response_model=UserResponse)
+async def upload_profile_picture(
+    user_id: UUID,
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Check if user is authorized to update this profile picture
+    if current_user.role not in [UserRole.ADMIN, UserRole.MANAGER] and str(current_user.id) != str(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only update your own profile picture"
+        )
+    
+    # Upload to MinIO
+    profile_picture_url = await MinioService.upload_profile_picture(file, str(user_id))
+    
+    # Update user profile in database
+    user.profile_picture_url = profile_picture_url
+    await db.commit()</code></pre>
+
+    <p>The API response evidence (Figure 1) confirms this endpoint works correctly, returning a user object with an updated profile picture URL.</p>
+
+    <div class="page-break"></div>
+
+    <h2>4. Implementation Challenges and Solutions</h2>
+
+    <h3>4.1 MinIO Configuration Challenges</h3>
+
+    <div class="highlight">
+        <p><strong>Challenge:</strong> Profile picture uploads were failing due to connection issues with MinIO.</p>
+
+        <p><strong>Root Cause:</strong></p>
+        <ul>
+            <li>Conflicting MinIO endpoint configurations in the <code>.env</code> file:
+                <pre><code>minio_endpoint=minio:9000
+minio_endpoint=localhost:9000</code></pre>
+            </li>
+            <li>Docker networking confusion between container-to-container and host-to-container connections</li>
+        </ul>
+
+        <p><strong>Solution:</strong></p>
+        <ul>
+            <li>Fixed the environment configuration by removing the duplicate endpoint setting</li>
+            <li>Used <code>localhost:9000</code> for API calls from the host machine</li>
+            <li>Ensured bucket name in settings matched the expected configuration</li>
+        </ul>
+    </div>
+
+    <h3>4.2 Variable Scope Issues</h3>
+
+    <div class="highlight">
+        <p><strong>Challenge:</strong> The application showed errors when uploading profile pictures:</p>
+        <pre><code>Error in MinioService.upload_profile_picture: cannot access local variable 'settings' where it is not associated with a value</code></pre>
+
+        <p><strong>Root Cause:</strong></p>
+        <ul>
+            <li>Variable shadowing from duplicate imports of settings</li>
+            <li>Python scoping rules causing conflicts between global and local variables</li>
+        </ul>
+
+        <p><strong>Solution:</strong></p>
+        <ul>
+            <li>Removed redundant imports inside methods:
+                <pre><code># Remove these lines
+from app.dependencies import get_settings
+settings = get_settings()</code></pre>
+            </li>
+            <li>Used the globally imported settings variable consistently</li>
+            <li>Fixed URL generation logic to use the correct base URL</li>
+        </ul>
+    </div>
+
+    <h2>5. Development Process and Branch Structure</h2>
+
+    <p>Our development followed a feature-branch workflow, as evidenced by the repository branch structure:</p>
+
+    <table class="branch-table">
+        <tr>
+            <th>Branch Name</th>
+            <th>Purpose and Implementation</th>
+        </tr>
+        <tr>
+            <td>fix-email-verification-errors</td>
+            <td>Fixed issues in the email verification process, including token validation and error handling. Implemented proper error messages for invalid or expired tokens.</td>
+        </tr>
+        <tr>
+            <td>fix-improve-email-verification</td>
+            <td>Enhanced the email verification workflow with better user experience, clearer messages, and improved token handling.</td>
+        </tr>
+        <tr>
+            <td>fix/email-verification-token-security</td>
+            <td>Strengthened security for verification tokens by implementing proper expiration, one-time use, and cryptographic signing.</td>
+        </tr>
+        <tr>
+            <td>fix/password-policy-enforcement</td>
+            <td>Implemented robust password requirements including minimum length, special characters, and preventing common passwords.</td>
+        </tr>
+        <tr>
+            <td>fix-profile-picture-validation</td>
+            <td>Added comprehensive validation for uploaded profile pictures including file type checking, size limits, and content validation.</td>
+        </tr>
+        <tr>
+            <td>fix-url-generation</td>
+            <td>Fixed issues with URL generation for profile pictures, ensuring consistent and accessible URLs across the application.</td>
+        </tr>
+        <tr>
+            <td>profile-picture-feature</td>
+            <td>Main feature branch for implementing the complete profile picture functionality including upload, storage, and retrieval capabilities.</td>
+        </tr>
+        <tr>
+            <td>test_improvements</td>
+            <td>Enhanced test coverage across the application, particularly for image validation and MinIO service integration.</td>
+        </tr>
+    </table>
+
+    <p>This structured approach allowed us to isolate feature development and fixes, making the codebase more maintainable and enabling parallel development of features.</p>
+
+    <div class="page-break"></div>
+
+    <h2>6. Conclusion</h2>
+
+    <p>The User Management System project has successfully delivered a comprehensive solution with robust user authentication, profile management, and profile picture functionality. The evidence from API responses, MinIO storage, and email verification demonstrates the proper implementation of all key features.</p>
+
+    <p>Throughout the development process, we encountered and solved several technical challenges, particularly with MinIO configuration, variable scoping, and testing. Our solutions have resulted in a stable, functioning system that meets all requirements.</p>
+
+    <p>The modular architecture, containerized deployment, and extensive test coverage ensure that the application is maintainable and extensible for future development. The branch structure reveals a methodical approach to feature development and bug fixing, with clear separation of concerns.</p>
+
+    <p>Moving forward, the system could benefit from enhanced image validation, expanded test coverage, and optimization of the storage mechanism. However, as it stands, the User Management System successfully fulfills its core purpose, providing a secure and feature-rich platform for user management.</p>
+
+    <div class="footer">
+        <p>© 2025 Sai Ram Charan BANDARUPALLI | <a href="https://github.com/sairamcharan9/user_management_FP_sb2853" target="_blank">GitHub Repository</a></p>
+    </div>
+</body>
+</html>

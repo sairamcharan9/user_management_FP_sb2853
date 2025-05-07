@@ -94,6 +94,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: ${{ steps.check_secrets.outputs.has_docker_secrets == 'true' }}
           tags: sairamcharan9/user_management:${{ github.sha }} # Uses the Git SHA for tagging
           platforms: linux/amd64 # Simplified for faster builds
