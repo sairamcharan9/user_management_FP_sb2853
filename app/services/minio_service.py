@@ -111,12 +111,12 @@ class MinioService:
             else:
                 logger.warning("File data is empty! This indicates the file was not properly uploaded.")
             
-            # Validate file size (limit to 5MB)
-            if file_size > 5 * 1024 * 1024:  # 5MB in bytes
+            # Validate file size (limit to 10MB)
+            if file_size > 10 * 1024 * 1024:  # 10MB in bytes
                 logger.warning(f"File size {file_size} exceeds limit")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="File size exceeds the 5MB limit"
+                    detail="File size exceeds the 10MB limit"
                 )
                 
             # Validate file type (only allow images)
